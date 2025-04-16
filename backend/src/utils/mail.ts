@@ -1,8 +1,6 @@
 import { sendgrid } from '@backend/config/sendgrid'
 import { log } from '@backend/logger'
 import { config } from '@shared/config'
-import path from 'path'
-import fs from 'fs'
 
 
 const FROM_EMAIL = config.sendgrid.fromEmail
@@ -41,29 +39,4 @@ export const sendEmail = async ({ to, subject, html, plain }: { to: string; subj
 		if (code === 403 || code === 429) log.warn('⛔ Quota exceeded or rate limited')
 		return false
 	}
-}
-
-
-/**
- * Wraps the HTML content in a base layout
- * @param html - HTML content to be wrapped
- * @param subject - Subject of the email
- * @returns The wrapped HTML content
- */
-export const wrapInLayout = (html: string, subject: string) => renderTemplate('base', { subject, content: html })
-
-
-const templateDir = path.resolve(__dirname, 'templates')
-
-/**
- * Renders an HTML template with the given replacements
- * @param filename - Template filename (without extension)
- * @param replacements - Object containing key-value pairs for replacements
- * @returns The rendered HTML content as a string
- */
-export const renderTemplate = (filename: string, replacements: Record<string, string>): string => {
-	const fullPath = path.resolve(templateDir, `${filename}.html`)
-	let content = fs.readFileSync(fullPath, 'utf-8')
-	for (const [key, value] of Object.entries(replacements)) content = content.replaceAll(`{{${key}}}`, value)
-	return content
 }

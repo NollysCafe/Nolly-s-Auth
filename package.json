@@ -1,0 +1,16 @@
+{
+	"name": "nollyauth",
+	"private": true,
+	"version": "1.0.0",
+	"scripts": {
+		"dev": "pnpm --filter frontend dev & pnpm --filter backend dev",
+		"build": "pnpm --filter frontend build"
+	},
+	"workspaces": [
+		"frontend",
+		"backend"
+	],
+	"dependencies": {
+		"dotenv": "^16.4.7"
+	}
+}
